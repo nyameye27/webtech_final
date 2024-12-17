@@ -1,0 +1,180 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(
+        45deg,
+        #ffd1e8 0%,
+        #c9e7ff 25%,
+        #d1ffdb 50%,
+        #ffd6f3 75%,
+        #d4e5ff 100%
+    );
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    padding: 0;
+    position: relative;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top left,
+        rgba(255, 192, 233, 0.5) 0%,
+        rgba(170, 212, 255, 0.5) 50%,
+        rgba(255, 226, 154, 0.5) 100%
+    );
+    z-index: -2;
+    pointer-events: none;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg,
+        rgba(255, 156, 178, 0.2),
+        rgba(147, 201, 253, 0.2),
+        rgba(255, 198, 135, 0.2)
+    );
+    z-index: -1;
+    pointer-events: none;
+}
+
+form {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+fieldset {
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(183, 157, 255, 0.25);
+    backdrop-filter: blur(5px);
+}
+
+h2 {
+    color: #6a5c99;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    font-size: 1.8rem;
+}
+
+input[type="email"], 
+input[type="text"], 
+input[type="password"] {
+    width: 100%;
+    padding: 0.8rem 0;
+    margin-bottom: 1.5rem;
+    border: none;
+    border-bottom: 2px solid #c4b8ff;
+    background-color: transparent;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input[type="email"]::placeholder, 
+input[type="text"]::placeholder, 
+input[type="password"]::placeholder {
+    color: #8e88b3;
+}
+
+input[type="email"]:focus, 
+input[type="text"]:focus, 
+input[type="password"]:focus {
+    border-bottom-color: #9c85ff;
+}
+
+input[type="checkbox"] {
+    margin-right: 0.5rem;
+    accent-color: #9c85ff;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(45deg, #ff85b3, #9c85ff);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    margin-top: 1rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+input[type="submit"]:hover {
+    background: linear-gradient(45deg, #ff6ba7, #8a6dff);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(156, 133, 255, 0.5);
+}
+
+label {
+    color: #6a5c99;
+    font-size: 0.9rem;
+}
+
+p {
+    text-align: center;
+    color: #6a5c99;
+    font-size: 0.9rem;
+    margin-top: 1.5rem;
+}
+
+a {
+    color: #9c85ff;
+    text-decoration: none;
+    margin-left: 0.5rem;
+    transition: color 0.3s ease;
+    font-weight: 500;
+}
+
+a:hover {
+    color: #ff85b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding-right: 5%;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-right: 0;
+        justify-content: center;
+    }
+
+    form {
+        padding: 1rem;
+    }
+
+    fieldset {
+        padding: 1.5rem;
+    }
+}

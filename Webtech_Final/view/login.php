@@ -7,7 +7,7 @@ session_start(); // This should be at the very beginning of each page.
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="./assets/css/Login.css"> <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="../assets/css/Login.css"> <!-- Link to external CSS file -->
 </head>
 <body>
     <div class="container"></div> <!-- Background container -->

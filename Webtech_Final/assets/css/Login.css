@@ -1,4 +1,4 @@
-/* Reset default styles */
+ /* Reset default styles */
 * {
     margin: 0;
     padding: 0;
@@ -9,7 +9,7 @@
 body {
     min-height: 100vh;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     background: linear-gradient(
         45deg,
@@ -21,7 +21,7 @@ body {
     );
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
-    padding-right: 10%;
+    padding: 0;
 }
 
 @keyframes gradientBG {
@@ -62,6 +62,7 @@ form {
     width: 100%;
     max-width: 400px;
     padding: 2rem;
+    margin: 0 auto;
 }
 
 fieldset {
@@ -164,18 +165,27 @@ a:hover {
     body {
         padding-right: 5%;
     }
+
+    form {
+        padding: 1rem;
+    }
+
+    fieldset {
+        padding: 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
     body {
-        padding-right: 0;
+        padding: 0;
         justify-content: center;
     }
-    
+
     form {
         padding: 1rem;
+        max-width: 95%;
     }
-    
+
     fieldset {
         padding: 1.5rem;
     }

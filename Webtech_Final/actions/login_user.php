@@ -42,6 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['userrole'] = $user_role;
             $_SESSION['username'] = $username; // Corrected variable name here
 
+
+          
+
             if ($user_role == "admin") {
                 header('Location: ./../view/admin/admin_dashboard.php');
                 exit(); // Ensure the script stops after redirection

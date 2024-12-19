@@ -39,7 +39,7 @@ session_start();
             <div class="hero-text">
                 <h1>Your thoughts, beautifully organized</h1>
                 <p>Create a safe space for your daily reflections, goals, and memories. Our intuitive journal platform helps you maintain a meaningful daily practice.</p>
-                <a href="view/signup.php" class="cta-button">Start Journaling Free</a>
+                <a href="view/signupnew.php"class="cta-button">Start Journaling Free</a>
             </div>
         </section>
 
@@ -77,7 +77,7 @@ session_start();
         <section class="call-to-action">
             <h2>Ready to Start?</h2>
             <p>Join thousands of others in creating a meaningful and mindful journaling practice.</p>
-            <a href="view/signup.php" class="cta-button">Start Journaling Free</a>
+            <a href="view/signupnew.php" class="cta-button">Start Journaling Free</a>
         </section>
     </div>
 </body>

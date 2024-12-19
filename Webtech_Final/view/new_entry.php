@@ -11,6 +11,9 @@ require '../db/db.php';
 $conn = connectDB();
 
 
+//echo 'session '.$_SESSION['id'];
+
+
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get database connection
@@ -18,14 +21,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Sanitize and validate inputs
     $title = filter_input(INPUT_POST, 'entryTitle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$mood = filter_input(INPUT_POST, 'entryMood', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$content = filter_input(INPUT_POST, 'entryContent', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $mood = filter_input(INPUT_POST, 'entryMood', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $content = filter_input(INPUT_POST, 'entryContent', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 // Process tags (split comma-separated tags and sanitize)
-$tags_input = filter_input(INPUT_POST, 'entryTags', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $tags_input = filter_input(INPUT_POST, 'entryTags', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $tags = array_map('trim', explode(',', $tags_input));
     $tags = array_filter($tags); // Remove empty tags
     
+
     // Validate required fields
     $errors = [];
     if (empty($title)) $errors[] = "Title is required";
@@ -35,12 +39,12 @@ $tags_input = filter_input(INPUT_POST, 'entryTags', FILTER_SANITIZE_FULL_SPECIAL
     // If no errors, insert entry into database
     if (empty($errors)) {
         // Prepare SQL to prevent SQL injection
-        $stmt = $conn->prepare("INSERT INTO Entries (title, mood, content, tags, created_at) VALUES (?, ?, ?, ?, NOW())");
+        $stmt = $conn->prepare("INSERT INTO Entries (title, mood, user_id, content, tags, created_at) VALUES (?, ?, ?, ?, ?,  NOW())");
         
         // Convert tags to a JSON string for storage
         $tags_json = json_encode($tags);
         
-        $stmt->bind_param("ssss", $title, $mood, $content, $tags_json);
+        $stmt->bind_param("sssss", $title, $mood, $_SESSION['id'], $content, $tags_json);
         
         if ($stmt->execute()) {
             // Redirect to dashboard or show success message
@@ -86,7 +90,7 @@ $tags_input = filter_input(INPUT_POST, 'entryTags', FILTER_SANITIZE_FULL_SPECIAL
     <nav class="main-navigation">
         <div class="nav-container">
             <div class="logo">
-                <a href="index.php">MyJournal</a>
+                <a href="index.php">Mindful Journal</a>
             </div>
             <ul class="nav-links">
                 <li><a href="dashboard.php">Dashboard</a></li>

@@ -1,75 +1,94 @@
 <?php
-// Start session at the very beginning of the script
-session_start();
+// Start session at the very beginning of the scrip
+
 
 // Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
+session_start();
 // Include the database connection file
 require '../db/db.php';
 $conn = connectDB();
 
 // Redirect if not logged in
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id'])) {
     header('Location: login.php');
-    exit();  // Make sure no further code is executed after redirect
+    exit();  
 }
 
-// Get database connection
-try {
-    $pdo = getDatabaseConnection();
-} catch (Exception $e) {
-    // Handle connection error
-    die("Database Connection Failed: " . $e->getMessage());
+// // Get database connection
+// try {
+//     $pdo = getDatabaseConnection();
+// } catch (Exception $e) {
+//     // Handle connection error
+//     die("Database Connection Failed: " . $e->getMessage());
+// }
+
+/// Example: Fetching a username using mysqli prepared statements
+$stmt = $conn->prepare("SELECT username FROM Users WHERE id = ?");
+$stmt->bind_param("i", $_SESSION['id']); // Bind the parameter
+$stmt->execute(); // Execute the query
+
+// Bind the result variables
+$stmt->bind_result($username);
+
+// Fetch the result
+if ($stmt->fetch()) {
+    echo "Username: " . $username;
+} else {
+    echo "No user found.";
 }
 
-// Fetch User Details
-try {
-    $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
-    $stmt->execute([$_SESSION['user_id']]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    $user['username'] = 'User'; // Fallback if fetching fails
-}
+$stmt->close();
 
 // Entry Filtering Logic
 $searchTerm = $_GET['search'] ?? '';
 $mood = $_GET['mood'] ?? 'all';
 $date = $_GET['date'] ?? '';
 
-// Construct SQL Query with Filters
-$query = "SELECT id, title, created_at, content, mood 
-          FROM Entries 
-          WHERE user_id = :user_id";
+// Initialize the base query
+$query = "SELECT entry_id, title, created_at, content, mood FROM Entries WHERE user_id = ?";
+$params = [$_SESSION['id']];
 
-$params = ['user_id' => $_SESSION['user_id']];
-
+// Build dynamic filters
 if (!empty($searchTerm)) {
-    $query .= " AND (title LIKE :search OR content LIKE :search)";
-    $params['search'] = "%$searchTerm%";
+    $query .= " AND (title LIKE ? OR content LIKE ?)";
+    $params[] = "%$searchTerm%";
+    $params[] = "%$searchTerm%";
 }
 
 if ($mood !== 'all') {
-    $query .= " AND mood = :mood";
-    $params['mood'] = $mood;
+    $query .= " AND mood = ?";
+    $params[] = $mood;
 }
 
 if (!empty($date)) {
-    $query .= " AND DATE(created_at) = :date";
-    $params['date'] = $date;
+    $query .= " AND DATE(created_at) = ?";
+    $params[] = $date;
 }
 
+// Append order by clause
 $query .= " ORDER BY created_at DESC";
 
-try {
-    $stmt = $pdo->prepare($query);
-    $stmt->execute($params);
-    $entries = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    $entries = []; // Empty array if query fails
-    error_log('Entry Fetch Error: ' . $e->getMessage());
+// Prepare and execute the query
+if ($stmt = $conn->prepare($query)) {
+    // Bind parameters dynamically
+    $types = str_repeat('s', count($params)); // Generate parameter types (all as strings here for simplicity)
+    $stmt->bind_param($types, ...$params);
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Fetch results
+    $entries = $result->fetch_all(MYSQLI_ASSOC);
+
+    // Close the statement
+    $stmt->close();
+} else {
+    $entries = []; // Fallback for errors
+    error_log("Query preparation failed: " . $conn->error);
 }
+
 
 ?>
 
@@ -122,7 +141,8 @@ try {
                             <option value="happy" <?php echo $mood == 'happy' ? 'selected' : ''; ?>>Happy</option>
                             <option value="sad" <?php echo $mood == 'sad' ? 'selected' : ''; ?>>Sad</option>
                             <option value="angry" <?php echo $mood == 'angry' ? 'selected' : ''; ?>>Angry</option>
-                            <option value="neutral" <?php echo $mood == 'neutral' ? 'selected' : ''; ?>>Neutral</option>
+                            <option value="relaxed" <?php echo $mood == 'relaxed' ? 'selected' : ''; ?>>Relaxed</option>
+                            <option value="excited" <?php echo $mood == 'excited' ? 'selected' : ''; ?>>Excited</option>
                         </select>
                         
                         <label for="filter-date">Filter by Date:</label>
@@ -141,7 +161,7 @@ try {
                     <ul>
                         <?php foreach ($entries as $entry): ?>
                             <li>
-                                <a href="entry_details.php?id=<?php echo $entry['id']; ?>">
+                                <a href="entry_details.php?id=<?php echo $entry['entry_id']; ?>">
                                     <h3><?php echo htmlspecialchars($entry['title']); ?></h3>
                                     <p class="entry-date"><?php echo date('F j, Y', strtotime($entry['created_at'])); ?></p>
                                     <p class="entry-preview"><?php echo htmlspecialchars(substr($entry['content'], 0, 150) . '...'); ?></p>

@@ -8,7 +8,7 @@ CREATE TABLE Mood (
 );
 
 -- Create User table
-CREATE TABLE User (
+CREATE TABLE Users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,

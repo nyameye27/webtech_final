@@ -1,10 +1,10 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require 'user_management.php';
-require 'analytics.php';
-require 'system_configuration.php';
 
+require '../../actions/user_management.php';
+require '../../actions/analytics.php';
+require '../../actions/system_configuration.php';
 // Initialize classes
 $userManagement = new UserManagement();
 $analytics = new Analytics();

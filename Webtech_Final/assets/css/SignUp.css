@@ -64,6 +64,7 @@ form {
     padding: 2rem;
     position: relative;
     z-index: 10;
+    margin: 0 auto;
 }
 
 fieldset {
@@ -83,8 +84,8 @@ h2 {
     font-size: 1.8rem;
 }
 
-input[type="email"], 
-input[type="text"], 
+input[type="email"],
+input[type="text"],
 input[type="password"] {
     width: 100%;
     padding: 0.8rem 0;
@@ -96,21 +97,36 @@ input[type="password"] {
     transition: all 0.3s ease;
 }
 
-input[type="email"]::placeholder, 
-input[type="text"]::placeholder, 
+input[type="email"]::placeholder,
+input[type="text"]::placeholder,
 input[type="password"]::placeholder {
     color: #8e88b3;
 }
 
-input[type="email"]:focus, 
-input[type="text"]:focus, 
+input[type="email"]:focus,
+input[type="text"]:focus,
 input[type="password"]:focus {
     border-bottom-color: #9c85ff;
+}
+
+div[style="display: inline-block;"] {
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
 }
 
 input[type="checkbox"] {
     margin-right: 0.5rem;
     accent-color: #9c85ff;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
+label[for="remember-me"] {
+    color: #6a5c99;
+    font-size: 0.9rem;
+    vertical-align: middle;
 }
 
 input[type="submit"] {
@@ -162,16 +178,25 @@ a:hover {
     body {
         padding-right: 5%;
     }
+
+    form {
+        padding: 1rem;
+    }
+
+    fieldset {
+        padding: 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
     body {
-        padding-right: 0;
+        padding: 0;
         justify-content: center;
     }
 
     form {
         padding: 1rem;
+        max-width: 95%;
     }
 
     fieldset {

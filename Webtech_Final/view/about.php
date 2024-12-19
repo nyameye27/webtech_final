@@ -64,7 +64,6 @@ session_start();
             </div>
         </section>
 
-        <!-- Rest of the sections remain the same until contact section -->
 
         <section id="contact" class="section contact">
             <h2>Contact Us</h2>

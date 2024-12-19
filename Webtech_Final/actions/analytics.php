@@ -1,16 +1,17 @@
 <?php
-require '../db/db.php';
-$conn = connectDB();
+require_once '../../db/db.php';
+$conn = connectDB(); // Use the connectDB() function to establish the connection
 
 
 class Analytics {
     private $conn;
 
+    // Constructor to initialize the database connection
     public function __construct() {
-        $db = new Database();
-        $this->conn = $db->getConnection();
+        $this->conn = $conn; // Use the already established connection
     }
 
+    // Get user growth over time
     public function getUserGrowth() {
         $query = "SELECT 
                     DATE_FORMAT(created_at, '%M %Y') as month, 
@@ -23,6 +24,7 @@ class Analytics {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Get journal entries over time
     public function getJournalEntriesOverTime() {
         $query = "SELECT 
                     DATE_FORMAT(created_at, '%M %Y') as month, 
@@ -35,6 +37,7 @@ class Analytics {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Get total number of users and entries
     public function getTotalUsersAndEntries() {
         $users_query = "SELECT COUNT(*) as total_users FROM Users";
         $entries_query = "SELECT COUNT(*) as total_entries FROM Entries";

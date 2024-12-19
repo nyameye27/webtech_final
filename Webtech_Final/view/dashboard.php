@@ -7,7 +7,9 @@ $conn = connectDB();
 
 // Initialize session (for production)
 session_start();
-$user_id = $_SESSION['id'] ?? 1; // Hardcoded for development, replace with session variable
+//  session_id();
+$user_id = $_SESSION['id'];
+// echo 'user id'.$user_id; // Hardcoded for development, replace with session variable
 
 // Fetch user details
 $user_query = "SELECT username FROM Users WHERE id = ?";
@@ -28,7 +30,7 @@ $stats = $stats_result->fetch_assoc();
 $stmt->close();
 
 // Fetch recent entries
-$entries_query = "SELECT title, DATE_FORMAT(created_at, '%Y-%m-%d') AS entry_date FROM Entries WHERE user_id = ? ORDER BY created_at DESC LIMIT 3";
+$entries_query = "SELECT title, user_id, DATE_FORMAT(created_at, '%Y-%m-%d') AS entry_date FROM Entries WHERE user_id = ? ORDER BY created_at DESC LIMIT 3";
 $stmt = $conn->prepare($entries_query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -50,12 +52,13 @@ $daily_prompt = "Reflect on one challenge you overcame today.";
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="../assets/js/dashboard.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">
-                <h1>MyJournal</h1>
+                <h1>Mindful Journal</h1>
             </div>
             <div class="user-info">
                 <p>Welcome back, <strong><?php echo htmlspecialchars($username); ?></strong></p>
@@ -108,7 +111,7 @@ $daily_prompt = "Reflect on one challenge you overcame today.";
                         <li>No recent entries available.</li>
                     <?php endif; ?>
                 </ul>
-                <button onclick="location.href='view_entries.php'" class="button">View All Entries</button>
+                <button onclick="location.href='view entry.php'" class="button">View All Entries</button>
             </div>
 
             <!-- Daily Prompt -->
@@ -123,8 +126,8 @@ $daily_prompt = "Reflect on one challenge you overcame today.";
                 <h2>Your Mood Tracker</h2>
                 <p>Mood trends for the past week:</p>
                 <div id="mood-chart">
-                    <!-- Placeholder for mood chart -->
-                    <canvas id="moodCanvas"></canvas>
+                    
+                    <canvas id="moodCanvas" width="600" height="400"></canvas>
                 </div>
             </div>
         </section>
@@ -133,5 +136,34 @@ $daily_prompt = "Reflect on one challenge you overcame today.";
     <footer>
         <p>&copy; 2024 Mindful Journal. All rights reserved.</p>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('moodCanvas').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Mood Trend',
+                        data: [3, 4, 2, 5, 3, 4, 1],
+                        borderColor: 'blue',
+                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>

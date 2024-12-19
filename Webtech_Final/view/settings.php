@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Verify and update password (Add hashing and verification in production)
         if ($newPassword === $confirmPassword) {
-            $password_query = "UPDATE Users SET password = ? WHERE id = ?";
+            $password_query = "UPDATE Users SET password_hash = ? WHERE id = ?";
             $stmt = $conn->prepare($password_query);
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
             $stmt->bind_param("si", $hashedPassword, $user_id);
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <nav class="main-navigation">
         <div class="nav-container">
             <div class="logo">
-                <h1>MyJournal</h1>
+                <h1>Mindful Journal</h1>
             </div>
             <ul class="nav-links">
                 <li><a href="dashboard.php">Dashboard</a></li>
